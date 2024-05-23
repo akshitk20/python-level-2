@@ -1,0 +1,1217 @@
+
+Object-oriented bootcamp, day 2
+Recap + Q&A
+Magic methods
+Class attributes
+Finding attributes with ICPO
+Inheritance -- what it is, and how it works (hint: ICPO)
+Object recap
+The whole point of object-oriented programming is to create new types of data structures. These data structures contain within them the regular data structures that Python provides. So, what's the advantage?
+
+By putting those core data structures (e.g., strings, lists, and dicts) inside of a class, we can think about and reason about our data at a higher level, and then use our class in other classes.
+Methods are defined on the class, which means that they are tightly bound to a particular data type. This is as opposed to regular functions, which aren't connected to any particular type. You can call any function on any value, and it might or might not work. But if you try to call a method on a value for which it isn't defined, you'll get an error saying that it doesn't exist.
+We will define classes, which are data types. A class is as type, and it's the factory that creates new objects. Each created object is called an "instance."
+The most important method in a class is __init__, whose job is to add attributes to a new instance. If you create 5 new instances, then __init__ runs five times, once per instance.
+__init__, like all methods in Python, expects to get the instance on which we're running it as the first argument, assigned to the parameter self. (You don't have to use self as a name, but it's a very very strong convention.)
+When we create/assign an attribute on self, we're adding to the private dictionary that the object has. This dict sticks around after __init__, and in general sticks around for the entire lifetime of the object.
+Technically speaking, you don't need to define all attributes in __init__. At any time, in any place, you can add a new attribute to a Python object. However, it's a bad idea to do that; you should define your attributes all in __init__ to make your code easier to understand.
+To read from an attribute, just use .NAME, where NAME is the name of the attribute.
+To set an attribute (i.e., to give it a new value), just assign to it.
+To define a method, just define a function inside of the class body. The first parameter must be self, but all other parameters are standard for functions -- you can use defaults, *args, and **kwargs if you want.
+class Person:
+    def __init__(self, name, shoe_size):
+        self.name = name     # I'm assigning the local variable / parameter name to the attribute self.name
+        self.shoe_size = shoe_size   # I'm assigning the local variable shoe_size to the attribute self.shoe_size
+
+    def greet(self):      # all methods are defined in the class, but invoked via the instance
+        return f'Hello, {self.name}!'
+
+p = Person('Reuven', 46)  # p is an instance of Person
+p.name   # retrieve the value of the attribut "name" on p
+'Reuven'
+p.shoe_size
+46
+p.last_name  # what happens if I retrieve this?
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+Cell In[8], line 1
+----> 1 p.last_name  # what happens if I retrieve this?
+
+AttributeError: 'Person' object has no attribute 'last_name'
+p.greet()
+'Hello, Reuven!'
+# tell me the type of object I have stored in p
+type(p)
+__main__.Person
+Methods
+Normally, methods are
+
+Invoked via the instance
+Defined on the class
+What we have seen so far, though, is not what Python calls a "class methods." Rather, the class describes the behavior of our object, and thus it's the place where all of the methods are defined and stored.
+
+When do things exist?
+If you assign an attribute to an object in Python, that attribute (basically, a private dictionary with a key-value store) sticks around for the lifetime of the object -- unless you remove or change it. When we assign to self.name, that means the object currently referred to by self (the current instance) will have a name attribute until the attribute is removed or the object goes away. It's crucial, then, to assign to self.SOMETHING and not just SOMETHING.
+If you assign to just SOMETHING inside of a function or method, that is a local variable. The variable goes away when the method returns. It doesn't stick around at all.
+class Bowl:
+    def __init__(self):
+        self.scoops = []   # here, we're assigning an attribute to self (the current instance). It'll stick around!
+        x = 100            # this is a local variable; x will go away when the function does, and any value it refers to is free from memory
+
+b = Bowl()
+vars(b)   # show me all of the attributes defined on b
+{'scoops': []}
+x
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+Cell In[13], line 1
+----> 1 x
+
+NameError: name 'x' is not defined
+Vocabulary
+Arguments -- when we call a function, the values we pass to the function are called "arguments." An argument can be an inline value, such as 5 or 'hello', but it can also be a variable, which is then evaluated, and whose value is really passed. So if I say func(5), 5 is the argument. If I say func(x), then we'll get the value of x, and that will be passed to func.
+Parameters -- when you call a function, the arguments are assigned to parameters, aka local variables whose names are set in the first line of a function definition, inside of (). A parameter is a local variable that is guaranteed to be assigned a value from the arguments, when the user invokes the function.
+Attributes -- every object in Python has attributes. Its attributes are a private dictionary, except the syntax is different. We can retrieve attribute b from object a with a.b. Just as variables can contain absolutely any type of value in Python, so too can attributes contain any type of value. A big part of what a class does is set up the attributes on every new instance it creates. The way it does this is by assigning one or more attributes to self (the current instance) just after creating the instance in __init__.
+class Person:
+    def __init__(self, name):
+        self.name = name
+        self.id_number = None   # why do this?
+The above, where we assign None to an attribute, basically allows us to say, "Yes, I set all attributes in __init__," even when we don't know what the actual value will or should be. This is a great way to signal to people reading/maintaining your code that you will set that value in the future, but that new objects will have a value of None.
+
+Namespaces
+When we say
+
+type(p)
+we get
+
+'__main__.Person'
+I said that __main__ is a namespace. What is that? The answer is: Every variable in Python is inside of a namespace, meaning (basically) a category for variables. Namespaces ensure that if I work on a program and call my variable x and you work on a program and call your variable x, then when we combine forces (and software), our two x variables won't clash. This is known as a "namespace collision."
+
+Python defines the __main__ namespace by default when we start up. Every module you load with import has its own namespace to avoid collisions.
+
+You can think of namespaces as last names in the variable world. YOu can thi
+
+What is a class?
+In many programming languages, a class describes what every object of a particular type should look like -- what its methods are, what its fields (attributes) will be, etc.
+
+But in Python, the class is an active, alive thing. It is actually an object, too! It executes at runtime when we create a new object.
+
+So perhaps in other languages it would make sense to call our class a blueprint. But in Python, it actively does things when the program runs, and so I feel good about calling it a factory.
+
+Class vs. function
+A function is a verb. We give it inputs, invoke it, and get outputs.
+
+By contrast, a class describes a new data type -- a noun! We can get many instances of that noun back when we invoke the class. But the class itself is a noun, and its methods are the verbs.
+
+I would say that methods are comparable to functions.
+
+But it is a reasonable question: When should I just write plain ol' functions and use regular core data structures in Python, and when should I define a class?
+
+There is no good answer.
+
+At some point, it becomes more maintainable, easier to understand, etc. to put your functionality in a class -- to define a data structure and methods, and use those. But if you want to write a program containing several functions, and just using a list of dicts? That's totally OK in the Python world.
+
+What do we call non object-oriented programming?
+If we call object-oriented programming "OOP," then maybe we should call non-object oriented programming "NOOP"?
+
+There are at least two basic schools of thought that aren't OOP:
+
+Procedural programming is the normal way that most people learn to program. They create (or use) data structures, they pass them to functions, and that's that.
+Functional programming is actually an approach in which we pretend that all data is immutable, and we treat functions as first-class objects (i.e., we can pass them as arguments to other functions and we can return them as results from functions). Python is not a functional language, but it has facilities for functional programming, which I actually like a lot. Comprehensions are probably Python's best known functional functionality.
+Steve Yegge -- in the land of the nouns.
+
+Alan Turing -- he described what you need for a complete programming language. Any language that can do all of those things is known as "Turing complete." Any Turing-complete language can do anything that any other Turing-complete language can do.
+
+If you can do it in C, then you can do it in Python, and vice versa.
+
+Exercise: Cellphone
+Define a Cellphone class. Each instance will have two attributes:
+number
+model
+You should be able to invoke the call method on your phone. This will return a string saying 'Calling ....," and print the number.
+class Cellphone:
+    def __init__(self, number, model):
+        self.number = number
+        self.model = model
+
+c1 = Cellphone('12345', 'iPhone')
+c2 = Cellphone('67890', 'Samsung Galaxy')
+vars(c1)
+{'number': '12345', 'model': 'iPhone'}
+vars(c2)
+{'number': '67890', 'model': 'Samsung Galaxy'}
+c1.number
+'12345'
+c2.number
+'67890'
+c1.model
+'iPhone'
+c2.model
+'Samsung Galaxy'
+class Cellphone:
+    def __init__(self, number, model):
+        self.number = number
+        self.model = model
+
+    def call(self):
+        return f'Calling {self.number} on your {self.model}...'
+
+c1 = Cellphone('12345', 'iPhone')
+c2 = Cellphone('67890', 'Samsung Galaxy')
+print(c1.call())
+Calling 12345 on your iPhone...
+print(c2.call())
+Calling 67890 on your Samsung Galaxy...
+# AD
+
+class Cellphone:
+    def __init__(self, number, model):
+        self.number = number
+        self.model = model
+
+    def call(self):
+        return f"calling.........{self.number}"
+
+c = Cellphone('123', 'iPhone')
+c.call()
+'calling.........123'
+print(c.call())
+calling.........123
+# KR
+
+class Cellphone:
+    def __init__(self, number, model):   # "dunder" means: two underscores before and after the name
+        self.number = number
+        self.model = model
+
+    def call(self):
+        return f'calling, {self.number}'
+
+c = Cellphone(8888, 'Nokia')
+
+c.call()
+'calling, 8888'
+Next up
+Magic methods
+Class attributes
+Searching for them with ICPO
+Magic methods
+When we perform certain operations in Python, the language looks for a method with a specific name that implements that operation. These methods all start and end with double underscore, and are thus known as "dunders" or "dunder methods." But a lot of people call them "magic methods."
+
+There are a lot of magic methods -- something like 120 of them. Many of them are super advanced and/or weird and/or you'll never really use them. But there are a bunch that are used on nearly every class.
+
+For example, __init__! You can think of these magic methods as "callbacks," methods that are invoked, if they exist, by specific parts of Python's object system. When your new object is created, if there is an __init__ method, it is invoked. If not, then it isn't.
+
+class Person:
+    def __init__(self, name):
+        self.name = name
+
+p = Person('Reuven')
+len(p)  # what is the length of our person?
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+Cell In[34], line 6
+      3         self.name = name
+      5 p = Person('Reuven')
+----> 6 len(p)  # what is the length of our person?
+
+TypeError: object of type 'Person' has no len()
+What happened here?
+We can call len on a wide variety of objects:
+
+lists, where we get the number of elements
+tuples, where we get the number of elements
+dict, where we get the number of key-value pairs
+But if we call len on our Person object, we get an error.
+
+What if we want to provide len with something on our objects? We can define __len__. That's the magic method that len looks for.
+
+class Person:
+    def __init__(self, name):
+        self.name = name
+
+    def __len__(self):   # I can return any non-negative integer I want, based on anything I want
+        return len(self.name)
+
+p = Person('Reuven')
+len(p)  # what is the length of our person?
+6
+# len(p) -> p.__len__() -> len(p.name) -> p.name.__len__()
+# don't do this!
+# you should not be invoking __len__ yourself, or almost any other magic method. Let Python do it for you.
+
+p.name.__len__()
+6
+len(10)
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+Cell In[42], line 1
+----> 1 len(10)
+
+TypeError: object of type 'int' has no len()
+p.name
+'Reuven'
+len(p.name)
+6
+len(self.name)
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+Cell In[47], line 1
+----> 1 len(self.name)
+
+NameError: name 'self' is not defined
+Another magic method: __str__
+When we turn our object into a string, what happens?
+
+str(p)  # yes, we get a string... but a really ugly one!
+'<__main__.Person object at 0x112b624b0>'
+# we can, however, define the __str__ method
+# when we invoke str() on our object, the result of that method will be used instead
+
+class Person:
+    def __init__(self, name):
+        self.name = name
+
+    def __len__(self):   # I can return any non-negative integer I want, based on anything I want
+        return len(self.name)
+
+    def __str__(self):  # the returned string can be of *any* length; you can build it inside of the method, and then return it
+        return f'Person named {self.name}'
+
+p = Person('Reuven')
+len(p)  # what is the length of our person?
+6
+str(p)
+'Person named Reuven'
+print(p)   # print invokes str() on whatever it prints
+Person named Reuven
+# what happens if I put p in a list?
+
+people = [p]
+print(people)  # let's print our list of people!
+[<__main__.Person object at 0x112b61af0>]
+__str__ vs. __repr__
+There are actually two methods that are used to convert an object into a string:
+
+__str__ is invoked by str, and also by print (because it invokes str on its arguments). This must return a string, and that string is meant for the end user to see. It's not supposed to contain internal, programmer stuff
+__repr__ is used by debuggers and Jupyter, and it is meant to show the printed representation of the data structure -- perfect for debugging and programming. This output should be good for programmers, not necessarily for end users.
+The Python convention is that __repr__ should actually return something that we can evaluate as a short Python expression. I ignore this completely.
+
+What about the logic?
+
+If we implement both __str__ and __repr__, then we're great:
+In str and print, we'll see __str__
+In debugging and other programmatic places, we'll see __repr__
+If we implement only __str__, then we get nice output for str and print, and we get ugly, default output for debugging
+If we implement only __repr__, then it covers all cases for both __repr__ and __str__.
+My suggestion: Only write __repr__, and have it return a string that's good for everyone.
+
+If and when you want to separate what is shown to users vs. programmers, you can always add __str__.
+
+Exercise: Magic methods on our cellphone
+Make it possible to invoke len on an instance of Cellphone. Return the length of the phone number.
+Make it possible to print an instance of Cellphone, which will show both the number and the model.
+class Cellphone:
+    def __init__(self, number, model):
+        self.number = number
+        self.model = model
+
+    def call(self):
+        return f'Calling {self.number} on your {self.model}...'
+
+    def __len__(self):
+        return len(self.number)
+
+c1 = Cellphone('12345', 'iPhone')
+c2 = Cellphone('678900', 'Samsung Galaxy')
+len(c1)
+5
+len(c2)
+6
+# AD
+
+class Cellphone:
+    def __init__(self, number, model):
+        self.number = number
+        self.model = model
+
+    def __len__(self):
+        return len(str(self.number))
+
+    def __str__(self):
+        return str(self.model)
+
+P = Cellphone(57650000000,"Samsung")
+
+print(len(P))
+
+print(P)
+11
+Samsung
+class Cellphone:
+    def __init__(self, number, model):
+        self.number = number
+        self.model = model
+
+    def call(self):
+        return f'Calling {self.number} on your {self.model}...'
+
+    def __len__(self):
+        return len(self.number)
+
+    def __repr__(self):
+        return f'{self.model}, phone number {self.number}'
+
+c1 = Cellphone('12345', 'iPhone')
+c2 = Cellphone('678900', 'Samsung Galaxy')
+print(c1)
+iPhone, phone number 12345
+print(c2)
+Samsung Galaxy, phone number 678900
+One more magic method
+Why is it that we define lists with [], but we retrieve from strings, lists, tuples, and dicts, with []?
+
+The answer is that [] are turned into a method call, the method __getitem__. __getitem__ takes two arguments:
+
+self
+index, what is passed inside of the square brackets
+class Person:
+    def __init__(self, name):
+        self.name = name
+
+    def __len__(self):   # I can return any non-negative integer I want, based on anything I want
+        return len(self.name)
+
+    def __str__(self):  # the returned string can be of *any* length; you can build it inside of the method, and then return it
+        return f'Person named {self.name}'
+
+    def __getitem__(self, index):
+        return self.name[index]
+
+p = Person('Reuven')
+len(p)  # what is the length of our person?
+6
+p[2]  # same as saying p.__getitem__(2)
+'u'
+p[1:4]  # same as saying p.__getitem__(slice(1, 4))
+'euv'
+class Person:
+    def __init__(self, name):
+        self.name = name
+    def greet(self):
+        return f'Hello, {self.name}!'
+
+p1 = Person('name1')
+p2 = Person('name2')
+
+print(p1.greet())
+print(p2.greet())
+Hello, name1!
+Hello, name2!
+# we want to be able to track the number of people we've created
+# option 1: global variable
+
+population = 0   # set up the global variable
+
+class Person:
+    def __init__(self, name):
+        self.name = name
+        population += 1   # add 1 to the global population
+    def greet(self):
+        return f'Hello, {self.name}!'
+
+print(f'Before, population = {population}')
+p1 = Person('name1')
+p2 = Person('name2')
+print(f'After, population = {population}')
+
+print(p1.greet())
+print(p2.greet())
+Before, population = 0
+---------------------------------------------------------------------------
+UnboundLocalError                         Traceback (most recent call last)
+Cell In[72], line 14
+     11         return f'Hello, {self.name}!'
+     13 print(f'Before, population = {population}')
+---> 14 p1 = Person('name1')
+     15 p2 = Person('name2')
+     16 print(f'After, population = {population}')
+
+Cell In[72], line 9, in Person.__init__(self, name)
+      7 def __init__(self, name):
+      8     self.name = name
+----> 9     population += 1
+
+UnboundLocalError: cannot access local variable 'population' where it is not associated with a value
+# we want to be able to track the number of people we've created
+# option 1: global variable (working version)
+# we need to indicate, in the function, that we want to be writing to the global variable population
+#  and not creating a local variable population, as well
+
+population = 0   # set up the global variable
+
+class Person:
+    def __init__(self, name):
+        global population   # this tells Python not to think of population as a local variable, but rather a global one
+        self.name = name
+        population += 1   # add 1 to the global population
+    def greet(self):
+        return f'Hello, {self.name}!'
+
+print(f'Before, population = {population}')
+p1 = Person('name1')
+p2 = Person('name2')
+print(f'After, population = {population}')
+
+print(p1.greet())
+print(p2.greet())
+Before, population = 0
+After, population = 2
+Hello, name1!
+Hello, name2!
+We want to keep track of the population. We don't want it to be a global variable, which has many issues. Where could we store it, such that we could keep it separate from (and a little hidden from) other parts of the program?
+
+It might seem like we could assign it to an attribute on self. Except that won't work, because we don't want it to be set on any given Person object. Rather, it needs to be available to all of the Person objects.
+
+To put it a different way, this value shouldn't be on any instance. It should be somewhere obvious that is not on any instance, and is not global.
+
+Remember where I said that everything in Python is an object?
+
+And remember when I said that every object in Python has attributes?
+
+Yes, we can assign an attribute to self, thus creating the equivalent of an an instance variable.
+
+We can also assign an attribute to the class! This uses the class as a namespace, where the attribute is somewhat sheltered from the rest of the program, but also available for us to read/write, and also makes sense logically.
+
+Remember that we can always, at any point in any Python program, read from or write to any attribute we want.
+
+# we want to be able to track the number of people we've created
+# option 1: global variable (working version)
+# we need to indicate, in the function, that we want to be writing to the global variable population
+#  and not creating a local variable population, as well
+
+class Person:
+    def __init__(self, name):
+        self.name = name         # set an attribute on the instance
+        Person.population += 1   # set (update) an attribute on the Person class
+    def greet(self):
+        return f'Hello, {self.name}!'
+
+Person.population = 0   # set up the attribute in our Person class
+
+print(f'Before, population = {Person.population}')
+p1 = Person('name1')
+p2 = Person('name2')
+print(f'After, population = {Person.population}')
+
+print(p1.greet())
+print(p2.greet())
+Before, population = 0
+After, population = 2
+Hello, name1!
+Hello, name2!
+# option 3: Define the class, and define the "population" attribute
+# within it during the definition time
+
+class Person:
+    # any definition of what looks like a variable inside of a class
+    # is actually an assignment to a class attribute
+
+    population = 0   # set up the attribute in our Person class -- same as Person.population = 0
+
+    def __init__(self, name):
+        self.name = name         # set an attribute on the instance
+        Person.population += 1   # set (update) an attribute on the Person class
+    def greet(self):
+        return f'Hello, {self.name}!'
+
+
+print(f'Before, population = {Person.population}')
+p1 = Person('name1')
+p2 = Person('name2')
+print(f'After, population = {Person.population}')
+
+print(p1.greet())
+print(p2.greet())
+Where do we use class attributes?
+Methods are all defined as class attributes.
+If you want to store common data that has to do with the class, then a class attribute is a good place to do it.
+If you want a constant (or a constant-like name/value) in your class, a class attribute is also a good technique.
+class Thing:
+    def __init__(self, x):
+        self.x = x
+
+    def __str__(self):
+        return f'[str] x = {self.x}'
+
+    def __repr__(self):
+        return f'[repr] x = {self.x}'
+t = Thing(10)
+print(t)
+[str] x = 10
+repr(t)
+'[repr] x = 10'
+Next up
+Class attributes vs. instance attributes
+Searching for attributes (ICPO rule)
+Inheritance and different types of method inheritance
+Magic methods and inheritance
+class Person:
+    population = 0   # set up the attribute in our Person class -- same as Person.population = 0
+
+    def __init__(self, name):
+        self.name = name         # set an attribute on the instance
+        Person.population += 1   # set (update) an attribute on the Person class
+    def greet(self):
+        return f'Hello, {self.name}!'
+
+print(f'Before, population = {Person.population}')
+p1 = Person('name1')
+p2 = Person('name2')
+print(f'After, population = {Person.population}')
+print(f'After, p1.population = {p1.population}')
+print(f'After, p2.population = {p2.population}')
+
+print(p1.greet())
+
+print(p2.greet())
+Before, population = 0
+After, population = 2
+After, p1.population = 2
+After, p2.population = 2
+Hello, name1!
+Hello, name2!
+ICPO rule
+When we ask Python to retrieve an attribute from an object, it doesn't just look where we asked.
+
+It also looks on a few other objects, if it doesn't find it right away:
+
+I, the instance: The first place it looks is on the object we asked for. If we ask for Person.population, Python asks Person: Do you have an attribute named population? The answer is "yes." But if we ask for p1.population, Python asks p1: Do you have an attribute named population? The answer here is "no."
+C, the class: Because we didn't find the attribute on the initial instance that we tried, we then turn to its class. That means we ask type(p1): Do you have an attribute named population? The answer is: Yes!
+# what is Person an instance of?
+type(Person)
+type
+type(str)
+type
+type(int)
+type
+type(dict)
+type
+# every single class in Python is an instance of type!
+
+# wait... so what is the type of type?
+type(type)
+type
+# what about on line 8 of this code? Maybe instead of assigning to Person.population, I can use self.population?
+
+class Person:
+    population = 0   # set up the attribute in our Person class -- same as Person.population = 0
+
+    def __init__(self, name):
+        self.name = name         # set an attribute on the instance
+        self.population += 1     # what happens if we now increment self.population?
+    def greet(self):
+        return f'Hello, {self.name}!'
+
+print(f'Before, population = {Person.population}')
+p1 = Person('name1')
+p2 = Person('name2')
+print(f'After, population = {Person.population}')
+print(f'After, p1.population = {p1.population}')
+print(f'After, p2.population = {p2.population}')
+
+print(p1.greet())
+
+print(p2.greet())
+Before, population = 0
+After, population = 0
+After, p1.population = 1
+After, p2.population = 1
+Hello, name1!
+Hello, name2!
+This is not good.
+What happened?
+
+When we say
+
+self.population += 1
+That gets expanded to
+
+self.population = self.population + 1
+What happens now?
+
+The right side of assignment always runs before the left side.
+On the right side, we ask for self.population.
+Does self, the instance, have population? No
+We turn to its class, type(self), aka Person, and we ask: Do you have population? The answer is yes, and the value is 0
+With 0+1 = 1 on the right side, we then assign the value 1 to the left side
+The left side is an assignment to the instance attribute self.population.
+We end up with Person.population remaining 0, and each instance having a self.population of 1.
+Don't do this!
+
+It's totally OK to retrieve a class attribute via either the class or the instance
+But NEVER assign to a class attribute via the instance, or you'll end up with this kind of problem.
+# what about on line 8 of this code? Maybe instead of assigning to Person.population, I can use self.population?
+
+class Person:
+    population = 0   # set up the attribute in our Person class -- same as Person.population = 0
+
+    def __init__(self, name):
+        self.name = name         # set an attribute on the instance
+        self.population += 1     # what happens if we now increment self.population?
+    def greet(self):
+        return f'Hello, {self.name}!'
+
+print(f'Before, population = {Person.population}')
+
+p1 = Person('name1')
+print(f'After defining p1, population = {Person.population}')
+print(f'After defining p1, p1.population = {p1.population}')
+
+p2 = Person('name2')
+print(f'After defining p2, population = {Person.population}')
+print(f'After defining p2, p1.population = {p1.population}')
+print(f'After defining p2, p2.population = {p2.population}')
+
+print(p1.greet())
+
+print(p2.greet())
+Before, population = 0
+After defining p1, population = 0
+After defining p1, p1.population = 1
+After defining p2, population = 0
+After defining p2, p1.population = 1
+After defining p2, p2.population = 1
+Hello, name1!
+Hello, name2!
+You already knew about the ICPO rule
+(At least, you knew about it in part)
+
+# back to working code!
+
+class Person:
+    population = 0
+
+    def __init__(self, name):
+        self.name = name         # set an attribute on the instance
+        Person.population += 1   # set (update) an attribute on the Person class
+    def greet(self):
+        return f'Hello, {self.name}!'
+
+print(f'Before, population = {Person.population}')
+p1 = Person('name1')
+p2 = Person('name2')
+print(f'After, population = {Person.population}')
+print(f'After, p1.population = {p1.population}')
+print(f'After, p2.population = {p2.population}')
+
+print(p1.greet())   # Python turns to p1, and asks: Do you have an attribute greet?  Answer: NO!
+                    #  Python turns to type(p1), aka Person, and asks: Do you have an attribute greet? YES!
+
+print(p2.greet())
+Before, population = 0
+After, population = 2
+After, p1.population = 2
+After, p2.population = 2
+Hello, name1!
+Hello, name2!
+Every single time we invoke a method in Python, it uses the ICPO rule to find, retrieve, and then execute the appropriate method.
+
+It looks on the instance, doesn't find it, and then looks on the class, and does.
+
+Exercise: Better ice cream
+Yesterday, we defined Scoop and Bowl classes. I want you to enhance these in several ways:
+
+Add __repr__ to Scoop, so that when we print an instance of Scoop, we get a string saying Scoop of FLAVOR
+Add __len__ to Bowl, so that when we ask for len of an instance of Bowl, we get an integer indicating how many scoops are there
+Add __repr__ to Bowl, so that when we print an instance of Bowl, we get a list of the scoops/flavors in the bowl, one per line.
+Example:
+
+b = Bowl()
+b.add_scoops(s1, s2, s3)
+print(b)
+I will get
+
+Bowl with
+- Scoop of chocolate
+- Scoop of vanilla
+- Scoop of coffee
+class Scoop:
+    def __init__(self, flavor):
+        self.flavor = flavor
+    def __repr__(self):
+        return f'Scoop of {self.flavor}'
+
+s1 = Scoop('chocolate')
+s2 = Scoop('vanilla')
+s3 = Scoop('coffee')
+
+class Bowl:
+    def __init__(self):
+        self.scoops = []
+
+    def add_scoops(self, *new_scoops):   # this means: pass as many args as you want, all will be in the tuple new_scoops
+        for one_scoop in new_scoops:      # go through the tuple, one element at a time
+            self.scoops.append(one_scoop) # append to the list
+
+    def flavors(self):
+        output = []
+        for one_scoop in self.scoops:
+            output.append(one_scoop.flavor)
+        return output
+
+    def __len__(self):
+        return len(self.scoops)
+
+    def __repr__(self):
+        output = 'Bowl of: \n'
+        for one_scoop in self.scoops:  # iterate over our list of scoops
+            output += f'\t{one_scoop}\n'
+        return output
+
+b = Bowl()
+b.add_scoops(s1, s2)
+b.add_scoops(s3)
+print(b.flavors())
+
+print(s1)
+print(s2)
+print(s3)
+
+print(len(b))
+print(b)
+['chocolate', 'vanilla', 'coffee']
+Scoop of chocolate
+Scoop of vanilla
+Scoop of coffee
+3
+Bowl of:
+	Scoop of chocolate
+	Scoop of vanilla
+	Scoop of coffee
+
+Exercise: Limited bowl size
+Right now, you can add as many scoops as you want to a bowl. The time has come to put an end to this madness, and be cruel to all of the ice cream eating teenagers in our town.
+
+Define a class attribute, MAX_SCOOPS, in Bowl. Set it to 3, indicating that we want a max of 3 scoops per bowl.
+Modify add_scoops such that the first three scoops added to the bowl are included, and all the rest are ignored.
+class Scoop:
+    def __init__(self, flavor):
+        self.flavor = flavor
+    def __repr__(self):
+        return f'Scoop of {self.flavor}'
+
+
+class Bowl:
+    MAX_SCOOPS = 3  # this is setting a class attribute on Bowl.
+    def __init__(self):
+        self.scoops = []
+
+    def add_scoops(self, *new_scoops):   # this means: pass as many args as you want, all will be in the tuple new_scoops
+        for one_scoop in new_scoops:      # go through the tuple, one element at a time
+            if len(self.scoops) >= self.MAX_SCOOPS:
+                print(f'\tReached {self.MAX_SCOOPS} scoops; ignoring the rest')
+                break
+            self.scoops.append(one_scoop) # append to the list
+
+    def flavors(self):
+        output = []
+        for one_scoop in self.scoops:
+            output.append(one_scoop.flavor)
+        return output
+
+    def __len__(self):
+        return len(self.scoops)
+
+    def __repr__(self):
+        output = 'Bowl of: \n'
+        for one_scoop in self.scoops:  # iterate over our list of scoops
+            output += f'\t{one_scoop}\n'
+        return output
+
+s1 = Scoop('chocolate')
+s2 = Scoop('vanilla')
+s3 = Scoop('coffee')
+s4 = Scoop('flavor 4')
+s5 = Scoop('flavor 5')
+s6 = Scoop('flavor 6')
+
+b = Bowl()
+b.add_scoops(s1, s2)
+b.add_scoops(s3, s4, s5)
+b.add_scoops(s6)
+print(b.flavors())
+
+print(b)
+	Reached 3 scoops; ignoring the rest
+	Reached 3 scoops; ignoring the rest
+['chocolate', 'vanilla', 'coffee']
+Bowl of:
+	Scoop of chocolate
+	Scoop of vanilla
+	Scoop of coffee
+
+# BH
+
+    def add_scoops(self, *scoops):
+        for scoop in scoops:
+            if len(self.scoops) >= self.MAX_SCOOPS:
+                break
+            self.scoops.append(scoop)
+  Cell In[102], line 3
+    def add_scoops(self, *scoops):
+    ^
+IndentationError: unexpected indent
+Next up
+Inheritance
+How does it work?
+The PO in ICPO
+The truth behind magic methods
+class Person:
+    def __init__(self, name):
+        self.name = name
+    def greet(self):
+        return f'Hello, {self.name}!'
+
+p1 = Person('name1')
+p2 = Person('name2')
+
+print(p1.greet())
+print(p2.greet())
+Hello, name1!
+Hello, name2!
+My boss now tells me that there is a request from our customers to have a new class, Employee, that does everything the same as Person, except that there is one additional attribute, id_number.
+
+How can I implement such a thing?
+
+Answer: Copy and paste!
+
+# Person class for people
+
+class Person:
+    def __init__(self, name):
+        self.name = name
+    def greet(self):
+        return f'Hello, {self.name}!'
+
+p1 = Person('name1')
+p2 = Person('name2')
+
+print(p1.greet())
+print(p2.greet())
+
+# Employee class for employees!
+class Employee:
+    def __init__(self, name, id_number):
+        self.name = name
+        self.id_number = id_number
+    def greet(self):
+        return f'Hello, {self.name}!'
+
+e1 = Employee('emp1', 1)
+e2 = Employee('emp2', 2)
+
+print(e1.greet())
+print(e2.greet())
+Hello, name1!
+Hello, name2!
+Hello, emp1!
+Hello, emp2!
+My boss asks: Why didn't you use inheritance?
+
+After all, the whole point of inheritance is to write less code: You take an existing class, inherit from it, and only indicate where you have different functionality.
+
+The relationship between classes when we have inheritance is often described as "is-a". If you can say that class A is-a B, then you can say that A inherits from B.
+
+Would we say that Car is-a Vehicle? Yes, so we could have Car inherit from Vehicle
+Would we say that Steak is-a Entree? Yes, so we can say that Steak inherits from Entree
+In the same way, because Employee is-a Person, we can say that Employee inherits from Person.
+
+How do we express this in Python, and what does it mean?
+
+class Person:
+    def __init__(self, name):
+        self.name = name
+    def greet(self):
+        return f'Hello, {self.name}!'
+
+p1 = Person('name1')
+p2 = Person('name2')
+
+print(p1.greet())
+print(p2.greet())
+
+class Employee(Person):    # this means: Employee inherits from Person
+    def __init__(self, name, id_number):
+        self.name = name
+        self.id_number = id_number
+
+e1 = Employee('emp1', 1)
+e2 = Employee('emp2', 2)
+
+print(e1.greet())  # e1 has greet? No. Employee has greet? No. Person has greet? yes, and that's what runs
+print(e2.greet())
+Hello, name1!
+Hello, name2!
+Hello, emp1!
+Hello, emp2!
+Back to the ICPO rule
+It's all about the attributes. When we invoke the greet method on e1 and e2, Python says:
+
+I, the instance: Does e1 have the attribute greet? Answer: No.
+C, the class: Does type(e1), aka Employee, have the attribute greet? Answer: No.
+P, the parent of the class: Does type(e1)'s parent (aka Person) have the attribute greet? Answer: Yes.
+# what about __init__? What about name?
+# since we assign the "name" attribute in Person.__init__,
+# we can get rid of that assignment in Employee.__init__
+
+class Person:
+    def __init__(self, name):
+        self.name = name
+    def greet(self):
+        return f'Hello, {self.name}!'
+
+p1 = Person('name1')
+p2 = Person('name2')
+
+print(p1.greet())
+print(p2.greet())
+
+class Employee(Person):    # this means: Employee inherits from Person
+    def __init__(self, name, id_number):
+        self.id_number = id_number
+
+e1 = Employee('emp1', 1)
+e2 = Employee('emp2', 2)
+
+print(e1.greet())
+print(e2.greet())
+Hello, name1!
+Hello, name2!
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+Cell In[108], line 24
+     21 e1 = Employee('emp1', 1)
+     22 e2 = Employee('emp2', 2)
+---> 24 print(e1.greet())  # e1 has greet? No. Employee has greet? No. Person has greet? yes, and that's what runs
+     25 print(e2.greet())
+
+Cell In[108], line 9, in Person.greet(self)
+      8 def greet(self):
+----> 9     return f'Hello, {self.name}!'
+
+AttributeError: 'Employee' object has no attribute 'name'
+vars(p1)
+{'name': 'name1'}
+vars(p2)
+{'name': 'name2'}
+vars(e1)
+{'id_number': 1}
+vars(e2)
+{'id_number': 2}
+class Person:
+    def __init__(self, name):
+        self.name = name
+    def greet(self):
+        return f'Hello, {self.name}!'
+
+p1 = Person('name1')
+p2 = Person('name2')
+
+print(p1.greet())
+print(p2.greet())
+
+class Employee(Person):    # this means: Employee inherits from Person
+    def __init__(self, name, id_number):
+        self.id_number = id_number
+
+e1 = Employee('emp1', 1)  # does e1 have __init__? No. Does type(e1) have __init__? Yes. So Employee.__init__ runs, and that's it
+e2 = Employee('emp2', 2)
+
+print(e1.greet())
+print(e2.greet())
+How can we deal with this sort of thing?
+The problem is that in Employee.__init__, we originally set both name and id_number. We took out the assignment to name because we didn't want to duplicate code. But then we found that Person.__init__ wasn't running, and it's where the assignment to name was done.
+
+Solutions:
+
+Put the assignment to name back in Employee.__init__. This is ugly and not generally recommended.
+In Employee.__init__, invoke Person.__init__. This actually works, and isn't so terrible.
+In Employee.__init__, use Python's special super facility to invoke the parent's __init__ method.
+# solution 2: Manually invoke Person.__init__
+
+class Person:
+    def __init__(self, name):
+        self.name = name
+    def greet(self):
+        return f'Hello, {self.name}!'
+
+p1 = Person('name1')
+p2 = Person('name2')
+
+print(p1.greet())
+print(p2.greet())
+
+class Employee(Person):    # this means: Employee inherits from Person
+    def __init__(self, name, id_number):
+        Person.__init__(self, name)  # manually invoke Person.__init__
+        self.id_number = id_number
+
+e1 = Employee('emp1', 1)  # does e1 have __init__? No. Does type(e1) have __init__? Yes. So Employee.__init__ runs, and that's it
+e2 = Employee('emp2', 2)
+
+print(e1.greet())
+print(e2.greet())
+Hello, name1!
+Hello, name2!
+Hello, emp1!
+Hello, emp2!
+# solution 3: Use "super"
+
+class Person:
+    def __init__(self, name):
+        self.name = name
+    def greet(self):
+        return f'Hello, {self.name}!'
+
+p1 = Person('name1')
+p2 = Person('name2')
+
+print(p1.greet())
+print(p2.greet())
+
+class Employee(Person):    # this means: Employee inherits from Person
+    def __init__(self, name, id_number):
+        super().__init__(name)  # super is a builtin function that returns the right class on which to invoke __init__
+        self.id_number = id_number
+
+e1 = Employee('emp1', 1)  # does e1 have __init__? No. Does type(e1) have __init__? Yes. So Employee.__init__ runs, and that's it
+e2 = Employee('emp2', 2)
+
+print(e1.greet())
+print(e2.greet())
+Hello, name1!
+Hello, name2!
+Hello, emp1!
+Hello, emp2!
+Exercise: BigBowl
+In the earlier exercise, we modified Bowl such that it has a limit of 3 scoops. We now want to implement BigBowl that has a maximum of 5 scoops. Define BigBowl such that it inherits from Bowl, but contains as little code as possilble. If you need to, you can modify Bowl, but keep that to a minimum.
+
+class Scoop:
+    def __init__(self, flavor):
+        self.flavor = flavor
+    def __repr__(self):
+        return f'Scoop of {self.flavor}'
+
+
+class Bowl:
+    MAX_SCOOPS = 3  # this is setting a class attribute on Bowl.
+    def __init__(self):
+        self.scoops = []
+
+    def add_scoops(self, *new_scoops):   # this means: pass as many args as you want, all will be in the tuple new_scoops
+        for one_scoop in new_scoops:      # go through the tuple, one element at a time
+            if len(self.scoops) >= self.MAX_SCOOPS:
+                break
+            self.scoops.append(one_scoop) # append to the list
+
+    def flavors(self):
+        output = []
+        for one_scoop in self.scoops:
+            output.append(one_scoop.flavor)
+        return output
+
+    def __len__(self):
+        return len(self.scoops)
+
+    def __repr__(self):
+        output = 'Bowl of: \n'
+        for one_scoop in self.scoops:  # iterate over our list of scoops
+            output += f'\t{one_scoop}\n'
+        return output
+
+s1 = Scoop('chocolate')
+s2 = Scoop('vanilla')
+s3 = Scoop('coffee')
+s4 = Scoop('flavor 4')
+s5 = Scoop('flavor 5')
+s6 = Scoop('flavor 6')
+
+b = Bowl()
+b.add_scoops(s1, s2)
+b.add_scoops(s3, s4, s5)
+b.add_scoops(s6)
+print(b.flavors())
+print(b)
+
+class BigBowl(Bowl):
+    MAX_SCOOPS = 5
+
+bb = BigBowl()
+bb.add_scoops(s1, s2)
+bb.add_scoops(s3, s4, s5)
+bb.add_scoops(s6)
+print(bb.flavors())
+print(bb)
+['chocolate', 'vanilla', 'coffee']
+Bowl of:
+	Scoop of chocolate
+	Scoop of vanilla
+	Scoop of coffee
+
+['chocolate', 'vanilla', 'coffee', 'flavor 4', 'flavor 5']
+Bowl of:
+	Scoop of chocolate
+	Scoop of vanilla
+	Scoop of coffee
+	Scoop of flavor 4
+	Scoop of flavor 5
+
+class Person:
+    def __init__(self, name):
+        self.name = name
+
+p = Person('Reuven')
+print(p)
+<__main__.Person object at 0x112bf3980>
+What is going on?
+I -- instance: Python turns to p and asks: Do you have a __str__ method? No.
+C -- class: Python turns to type(p), aka Person, and asks: Do you have a __str__ method? No.
+P -- parent: There is no special parent here
+O -- object, the top class in Python's class hierarchy. Python asks object, do you have __str__? The answer: YES.
+object is the top of the hierarchy. Every class either inherits from object, or inherits from something else that inherits from object. Eventually, all attribute queries end up there if there is no match.
+
+object defines only a handful of methods, but they are important, e.g., str.
+
+When we define __str__ on our own classes, we're stopping the ICPO search from getting all the way to object. In that way, our method takes priority over the object method.
+
+object vs type
+type is the class that creates classes. It defines attributes on every class when it is created. type is really only consulted about a class at creation time.
+By contrast, object exists so that at runtime, when we're searching for attributes, there is a final location in which we can look for methods.
+What about:
+
+type(object) is type, because object is a class.
+type(type) is type, because every class is an instance of type
+If you want to the "method resolution order" for a class, you can ask for its __mro__ class attribute
+
+Employee.__mro__
+(__main__.Employee, __main__.Person, object)
+BigBowl.__mro__
+(__main__.BigBowl, __main__.Bowl, object)
+Do we need to explicitly inherit from object?
+In older versions of Python, you needed to say that your class inherits from object:
+
+class Person(object):
+In modern Python, you don't need to, and it's considered unnecessary/over the top to do so:
+
+class Person:
+We know that Person inherits from object.
+
+Multiple inheritance
+There are languages in which a class can inherit from more than one parent. People are divided over this functionality:
+
+Some think that it's a terrible idea
+Others think it's the worst idea humanity has ever come up with
+If you want to use multiple inheritance in Python, just put more than one class name in the parentheses to indicate that you want to inherit from more than one. The order is important, and you put commas between the names:
+
+class Person(Mammal, Drives):

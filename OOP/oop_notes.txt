@@ -1,0 +1,756 @@
+
+Object-oriented bootcamp, day 1
+Agenda
+Intro to objects
+What are objects?
+In Python, everything is an object
+Creating your own data structures...
+...creating data structures using classes and objects
+What happens when you create a new object?
+Attributes
+Complex objects and composition
+Methods
+Writing methods
+The self parameter
+Other parameters, and other arguments
+Magic methods
+Class attributes
+Attribute lookup (ICPO rule)
+Inheritance
+The three paradigms of method inheritance
+Attribute inheritance
+Next steps -- where to from here?
+Jupyter
+Jupyter is a Web-based tool for writing Python code. If you can install Jupyter yourself, then great! You don't have to, though -- if you want to use PyCharm or VSCode, then that's fine, as well. (VSCode has a free plugin for Jupyter, if you want.)
+
+If you want to use a notebook and don't have Jupyter installed, you can use Google Colab.
+
+I can use Jupyter for both text/documentation (in "Markdown" mode) and also for Python code (in "code" mode). I can switch between the two with the menu at the top of the page.
+
+To indicate that I'm done editing a cell, I use shift+Enter.
+
+# now I'm in a code cell
+
+print('Hello, world!')  # shift + enter executes the code
+Hello, world!
+x = 100
+
+print(x)
+100
+# in Jupyter, if the final line of a code cell is an expression, we see the value right away.
+
+x
+100
+x**3
+1000000
+What are objects?
+Software has always been difficult to write, and even more difficult to maintain. Trying to find ways to maintain software has been going on for decades already.
+
+Organizing code so that you can find bugs and improve the code is crucial.
+
+Back in the 1970s, people were thinking about this. One of those people is named Alan Kay. Alan Kay didn't work on the front end of things, that end users would see. Rather, the thought about how to design software. He thought that it would be easier to maintain software if we could mimic the organization of a biological structure.
+
+Kay said that we could structure our programs like the human body, or an animal:
+
+Our body has many different types of cells. Each type of cell sends and receives different types of messages.
+We could structure our programs such that they contained different kinds of cells, each of which sent and received different kinds of messages.
+You can imagine:
+
+User "cell" that would send some messages, and receive others
+Security "cell" that would send some messages, and receive others
+This was the beginning of object-oriented programming:
+
+The "cells" were called "objects." Each thing in your program, each data structure, is actually a combination of data + actions (messages it can send, and messages it can receive)
+You'll have many cells of the same type. Each type of cell was known as a "class."
+Kay talked about sending messages. But nowadays, we talk about "calling methods."
+Kay created a programming language called Smalltalk.
+
+Python is object-oriented, meaning that it takes some inspiration from Smalltalk's ideas. But it has differnet ideas about how to go about implementing objects.
+
+Object-oriented programming is NOT a panacea for software problems. It is also not a religion.
+
+Object-oriented programming is a TECHNIQUE for MANAGING YOUR SOFTWARE CODE.
+
+This means that if you write a tiny program, you probably don't need to use objects. But it means that if you want to take advantage of someone else's code, and they did use objects, you'll likely want to do that.
+
+Everything is an object -- what does that mean, and so what?
+In Python, everything (just about) is an object. What does that mean?
+
+It means that we can apply the same rules to the data provided by Python as the data we create ourselves
+It means that the same rules apply to Python's own stuff and our stuff
+That makes it easier to understand the system, and for us extend/improve it.
+It also means that once you learn the rules for how things inside of Python work, you'll find that those rules are very consistent for your data sturctures, as well.
+
+We'll see that we can create classes (i.e., new data types) that follow the same rules as Python's built in data types, and work in the same ways.
+
+When I say "provided by Python," I mean:
+
+builtin data structures (e.g., int, str, dict, list)
+builtin functions (e.g., print, len)
+things that come in the standard library (import random, for example)
+Vocabulary
+In Python, there are several special vocabulary words we need to talk about objects:
+
+class and type: These are basically interchangeable words when we're talking about the program, but they are used differently when we are actually coding. We can think of a class as a factory for objects. So str is a class that creates new string objects. And int is a class that creates new integer objects. In fact, when you call int('5'), you are saying: I want to create a new integer based on the string '5'. When we invoke a class as a function, with (), we are creating a new object of that type.
+instance: When we create a new string object, we can also call that an "instance of str." When we create a new integer object, we can call that new object an "instance of int." In other words, an instance is an object that was created by a class.
+object: Classes and instances are both objects. The term "object" is a catchall for just about everything in Python.
+# how do we find out the type of an object?
+# answer: We ask it!
+
+s = 'abcde'
+type(s)   # here, we're using the "type" function to tell us: What kind of data is in s?
+str
+# this means: s contains a string object, aka an instance of str. When we ask for type(s), we get str back,
+# because that is the class of our object.
+
+d = {'a':100, 'b':200, 'c':300}
+type(d)
+dict
+# d's class/type is dict. That means d is a variable rerferring an an instance of dict.
+What do we care?
+The type/class of an object determines its functionality:
+
+How we create a new instance of this object
+What methods (functions) have been defined for it
+What arguments do they get?
+What outputs do they give us?
+What data is defined on each of these objects -- in what we call "attributes"
+If you're still thinking of the cell metaphor, then the "type of cell" determines the behavior and what kinds of data will be stored there.
+
+If you want to think of it as a factory, then think of each car factory producing different kinds of cars. If you have a Toyota, then it came out of a Toyota factory. Your car is an instance of Toyota. In this case, every instance of Toyota would have a VIN. That would be an attribute on the instance, because very single car has (or should have!) a unique number.
+
+x = 100
+
+type(x)  # it's easy to think: x is an integer. Really, though, x is a variable referring to an integer
+int
+s = 'abcd'
+len(s)  # this is not a method; this is a builtin function. You can always identify a method as having a a . before its name
+4
+We don't need objects!
+Object-oriented programming is an organizational technique for our code. But we can (if we want) get along OK without it.
+
+For example, let's say I want to keep track of people. I can use a tuple for that.
+
+p = ('Reuven', 'Lerner', 46)
+p[0]  # this gives me the first name
+'Reuven'
+p[1]   # this gives me the last name
+'Lerner'
+p[2]   # this gives me the shoe size
+46
+def fullname(person_tuple):
+    return f'{person_tuple[0]} {person_tuple[1]}'
+fullname(p)
+'Reuven Lerner'
+This works!
+But... There are some problems with this approach.
+
+We lose the advantages of abstraction. If we were to stick with tuples, we could still write and maintain our software. However, we would be constantly thinking about the details at a low level. With objects, we can create a Person class, and then think in terms of people and their attributes. Then we can write classes that assume we have a Person class.
+There is no guarantee that someone will call our fullname function on a tuple that contains a person. We can, in theory, call fullname with any data structure we want. If we do that, we'll get errors. Objects reduce the chance of this by connecting data with specific methods.
+It's super annoying to have to think about the first name being index 0, the last name being index 1, and the shoe size being index 2. With objects, we can give these fields names, and then think at a higher level.
+By using classes, we can enforce the number, type, and value of various attributes.
+Naming and variables
+When we create a new class, we need to store the class somewhere. That will be in a variable, though in Python it's traditional to use a capital letter for a variable containing a class, and lowercase for just about everything else.
+
+When we create a new instance of that class, we'll need to store it somewhere. That will also be a variable, containing an instance.
+
+In this way, it's no different from str (a class) and s (a variable containing an instance of str).
+
+Exercise: Non-object objects
+Define a tuple containing information about a company, with fields for the company's name, its domain, and number of employees.
+Write a function that expects to get that tuple, and returns a string saying "COMPANY in DOMAIN"
+What happens when you run type on your tuple? What do you get?
+c1 = ('BigCo', 'Money', 100000)
+c2 = ('SmallCo', 'Little money', 5)
+
+def describe(company_tuple):
+    return f'{company_tuple[0]} in {company_tuple[1]}'
+
+describe(c1)
+'BigCo in Money'
+describe(c2)
+'SmallCo in Little money'
+# let's get the type of our objects
+type(c1)
+tuple
+type(c2)
+tuple
+# let's say that I asked you to write a function that shows the company's name and its headcount
+
+def headcount(company_tuple):
+    return f'{company_tuple[0]} has {company_tuple[2]} employees'
+headcount(c1)
+'BigCo has 100000 employees'
+headcount(c2)
+'SmallCo has 5 employees'
+# BH asked -- why not just use + ?
+
+def headcount(company_tuple):
+    return company_tuple[0] + ' has ' + company_tuple[2] + ' employees'
+headcount(c1)
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+Cell In[28], line 1
+----> 1 headcount(c1)
+
+Cell In[27], line 4, in headcount(company_tuple)
+      3 def headcount(company_tuple):
+----> 4     return company_tuple[0] + ' has ' + company_tuple[2] + ' employees'
+
+TypeError: can only concatenate str (not "int") to str
+
+Next up
+Creating a class -- how it looks/works
+What happens when we use the class to create a new object?
+What do I want?
+I want to create a new Person class
+When I create a new instance of Person, I should be able to indicate the first name, last name, and shoe size
+I want it to feel/look like I'm working at a higher level of abstraction, not with a tuple, etc.
+We're going to define a new class!
+
+We use the class keyword in Python, and immediately after we give the name of the class and a :
+Immediately after the :, we have an indented block. This is the "class body," where the class is defined.
+Inside of the class body, we can define (a) methods and (b) class attributes. For now, we're just going to worry about methods.
+The most important method we can define is called __init__ (pronounced "dunder init," because it has double underscores on both sides). This is where we'll take the user's input and assign it to attributes.
+class Person:
+    def __init__(self, name):
+        self.name = name
+# how can I create a new Person instance based on this class definition?
+# *ALWAYS* to get a new instance of X, we need to invoke X()
+
+p = Person('Reuven')
+# p is an instance of Person
+# it is a Person object!
+
+type(p)
+__main__.Person
+What happened?
+I invoked Person, passing the string 'Reuven' as an argument. That was (eventually) passed to __init__, whose name parameter was assigned the string 'Reuven'.
+
+Then __init__ assigned that value to self.name. This is how we assign to an attribute on the instance. Once this is set to self.name, we say that the object has a name attribute. We can then retrieve it with .name on the object.
+
+p.name
+'Reuven'
+p2 = Person('Whoever')
+p2.name
+'Whoever'
+class Person:
+    def __init__(self, first, last, shoe_size):
+        self.first = first
+        self.last = last
+        self.shoe_size = shoe_size
+
+p = Person('Reuven', 'Lerner', 46)
+type(p)
+__main__.Person
+p.first
+'Reuven'
+p.last
+'Lerner'
+p.shoe_size
+46
+Exericse: Company
+Re-implement what we did before for a company, but this time create a new class for it. Call the class Company
+Create two instances of Company, each with a name, domain, and a size. Each of these three values should be assigned to an attribute in __init__.
+class Company:
+    def __init__(self, name):
+        self.name = name
+
+c1 = Company('BigCo')
+c2 = Company('SmallCo')
+
+# c1 = ('BigCo', 'Money', 100000)
+# c2 = ('SmallCo', 'Little money', 5)
+c1.name
+'BigCo'
+c2.name
+'SmallCo'
+type(c1)
+__main__.Company
+type(c2)
+__main__.Company
+class Company:
+    def __init__(self, name, domain, size):
+        self.name = name
+        self.domain = domain
+        self.size = size
+
+c1 = Company('BigCo', 'Money', 100000)
+c2 = Company('SmallCo', 'Little money', 5)
+c1.name
+'BigCo'
+c1.domain
+'Money'
+c1.size
+100000
+c2.size
+5
+We have questions!
+What is __init__? (Is it the "constructor" method for objects in Python?)
+What is self?
+Why are we assigning to self?
+What happens when we create a new instance
+When we invoke a class to create a new instance, the constructor method for that class is invoked. As the name indicates, the constructor creates a new instance of our class, and gets it ready to be returned.
+
+Many, many MANY people believe that the constructor in Python is __init__. They are completely wrong.
+
+The real constructor method in Python is called __new__. You will never run it directly yourself. You will never implement it yourself. Let Python create the objects for you!
+
+__new__ is invoked automatically when we call the class. It gets all of the arguments that you passed to the class.
+Inside of __new__, Python creates our new instance. The instance knows what type of object it is, but otherwise has no attributes.
+Where will those attributes be set? Inside of __init__. We need to somehow pass our object to __init__, along with all of the arguments that were passed to the class. We call __init__ with the instance that was just created, as the first argument, along with all of the rest of the arguments.
+This means that when we wrote
+
+Company('BigCo', 'Money', 100000)
+This was behind the scenes, turned into
+
+__init__(NEW_INSTANCE, 'BigCo', 'Money', 100000)
+Inside of __init__, we can (and normally do) assign attributes to our new object. An attribute is basically a name that comes after a ., and is sort of a private dictionary on an object.
+The first parameter in __init__ contains the new instance. In fact, in every method in Python, the first parameter contains the instance on which we're working. That parameter is called self, taken from the Smalltalk language. This is not a keyword, and is not set by Python. You could, in theory, use a different parameter name. DON'T DO IT!
+Because self refers to the instance, we can assign to self's attributes. Those will stick around, even when __init__ returns.
+Why do we even need self?
+One of the annoying things about objects in Python is self:
+
+Every method's first parameter is self, meaning that the first argument will always be the instance on which we're running
+When we want to retrieve attributes, we cannot just ask for x, but we must say self.x, to retrieve the attribute from the current instance
+When we want to set attributes, we cannot just set x, but we must say self.x, to set the attribute on the current instance.
+If we just try to retrieve x, then we're asking for the VARIABLE x, which is completely separate and differnet from the attribute self.x.
+If we just try to set x, then we're setting the LOCAL VARIABLE x, whose value will go away after the function returns.
+This leads many people to wonder what the heck is wrong with Python! Why do we need to explicitly talk about self rather than just use variables, and the language will know that we're talking about attributes on our object.
+
+In other languages, a class definition includes some declarations of what the instance variables aka fields aka attributes will be for an object. That allows the language to know in advance that when you set/retrieve x, are you talking about a variable? Or are you talking about an instance variable / field? In Python, we don't have such declarations, so there isn't any implicit way for the language to know.
+In Python, we have a very strict variable lookup rule called LEGB (local-enclosing-global-builtin). That has to do with all variables, inside and outside of methods/functions. In order for that rule to work, we need to use attributes stuck onto an object, and that object needs to be explicit. We use self to avoid confusing ourselves and Python between attributes and variables.
+Python generally likes to make things very explicit and clear, even if that means they're a bit wordier.
+In __init__, there is no rule that says the name of the parameter needs to match the name of the attribute. Python is totally OK with you saying:
+
+class Person:
+    def __init__(self, name):
+        self.call_me = name
+class Person:
+    def __init__(self, name):
+        self.name = name
+
+p = Person('Reuven')
+p.name
+'Reuven'
+Summary of class definitions so far
+When you want to define a new class, use class and then name of the class (in CamelCase)
+Assuming that you want to assign one or more attributes to each instance, you'll want to define a __init__ method.
+Like all methods, the first parameter is self, and refers to the new instance that we've just created.
+The job of __init__ is to assign attributes to self.
+Typically, we'll assign those attributes to self based on parameters.
+class Company:
+    def __init__(self, name, domain, size):
+        self.a = name
+        self.b = domain
+        self.c = size
+
+c1 = Company('BigCo', 'Money', 100000)
+c2 = Company('SmallCo', 'Little money', 5)
+c1.a
+'BigCo'
+c1.b
+'Money'
+c1.c
+100000
+class Company:
+    def __init__(self, name, domain, size):
+        self.a = name
+        self.b = domain
+        self.c = size
+        self.printable = f'{name}, a company that makes {domain} with {size} workers'
+
+c1 = Company('BigCo', 'Money', 100000)
+c2 = Company('SmallCo', 'Little money', 5)
+c1.printable
+'BigCo, a company that makes Money with 100000 workers'
+Next up
+Setting and retrieving attributes
+Simple methods
+Getters and setters (or not)
+class Person:
+    def __init__(self, first, last, shoe_size):
+        self.first = first
+        self.last = last
+        self.shoe_size = shoe_size
+
+p1 = Person('Reuven', 'Lerner' , 46)
+p2 = Person('Someone', 'Else', 42)
+# I can get any attribute value from any object just by asking for it
+p1.first
+'Reuven'
+p2.first
+'Someone'
+What about the getters and setters?
+In other programming languages that use objects, there are a bunch of differences from what we see here:
+
+You can indicate whether an attribute is public, private, or protected. These give you some ability to restrict who can read from and write to your attributes. Python has NOTHING OF THE SORT; everything is absolutely public. You cannot hide an attribute from someone else who wants to see it, or even who wants to modify it.
+Because all attributes are public, there isn't a need for us to have methods that then get special access, or that check who is reading/writing.
+In many other languages, it's typical (even necessary) to write a "getter" method to retrieve a value, and a "setter" method to assign to a value. We can write such methods, but it's rare to do so. It's considered "un-Pythonic," as we say.
+How can I define methods? What do they look like?
+To define a method, we:
+
+Define a function inside of the class definition
+The function's first parameter must always be self, which contains the instance
+Any time we want to read from or write to an attribute, we must preface its name with self.
+class Person:
+    def __init__(self, first, last, shoe_size):
+        self.first = first
+        self.last = last
+        self.shoe_size = shoe_size
+
+    def fullname(self):   # this is a method!
+        return f'{self.first} {self.last}'
+
+    def has_big_feet(self):
+        return self.shoe_size > 44
+
+p1 = Person('Reuven', 'Lerner' , 46)
+p2 = Person('Someone', 'Else', 42)
+p1.fullname()   # notice, I have to use () to run the method
+'Reuven Lerner'
+p1.has_big_feet()
+True
+class Person:
+    def __init__(self, first, last, shoe_size):
+        self.first = first
+        self.last = last
+        self.shoe_size = shoe_size
+
+    def fullname(self):   # this is a method!
+        return f'{self.first} {self.last}'
+
+    def has_big_feet(self):
+        return self.shoe_size > 44
+
+    def get_first(self):
+        return self.first
+
+    def get_last(self):
+        return self.last
+
+    def get_shoe_size(self):
+        return self.shoe_size
+
+    def set_first(self, new_first):
+        self.first = new_first
+
+p1 = Person('Reuven', 'Lerner' , 46)
+p2 = Person('Someone', 'Else', 42)
+p1.get_first()
+'Reuven'
+p1.get_last()
+'Lerner'
+p1.set_first('ASDFADFAF')
+p1.fullname()
+'ASDFADFAF Lerner'
+# rather than write these methods, in Python we just retrieve and set the attributes directly.
+p1.first
+'ASDFADFAF'
+p1.last
+'Lerner'
+p1.first = 'Reuven'   # this is how I set a value
+Methods
+Functions are the verbs in a programming language. Methods are functions that we define in a class, and which can only be invoked via the object. They are connected to the object, and thus ensure (to some degree) that the method can only be invoked on objects of the right type.
+
+Whereas we invoke a function like this:
+
+FUNCTION(DATA, ARG1, ARG2)
+Methods are invoked like this:
+
+DATA.METHOD(ARG1, ARG2)
+This ensures that all of the methods that have to do with a particular object type are organized under that class.
+
+To define a method, we use def inside of the class definition, and self needs to be the first parameter.
+
+class Person:
+    def __init__(self, first, last, shoe_size):
+        self.first = first
+        self.last = last
+        self.shoe_size = shoe_size
+
+    def fullname(self):   # this is a method!
+        return f'{self.first} {self.last}'
+
+p1 = Person('Reuven', 'Lerner' , 46)
+p2 = Person('Someone', 'Else', 42)
+
+print(p1.fullname())
+print(p2.fullname())
+Reuven Lerner
+Someone Else
+Where is the attribute stored?
+If the attribute is set or retrieved on self, by definition that means that the attribute is on a specific instance. It's an instance attribute. This is what many programming languages would call an "instance variable." But they aren't variables in Python; they are attributes attached to our instances, and it's better to think of them this way. In our car analogy, an attribute for the instance might be the VIN, the color, the model, the make, etc.
+
+Can we have attributes on a class? Yes, and we'll talk about that tomorrow. Class attributes apply to the factory, not to the products that it makes. A class attribute for a car factory might be the number of employees, or the size. But it wouldn't be the color of the car; it might be the color of the factory.
+
+vars(p1)   # give me a dict with all of the attributes of p1
+{'first': 'Reuven', 'last': 'Lerner', 'shoe_size': 46}
+p1.first = 'ASDFAFSA'   # here we have assigned a new value to p1.first
+vars(p1)
+{'first': 'ASDFAFSA', 'last': 'Lerner', 'shoe_size': 46}
+Exercise: Ice cream scoop
+Define a class, Scoop. Each instance of Scoop represents one scoop of ice cream.
+Each scoop has one attribute, flavor, that can be assigned when the instance is created, as a string.
+Define three instances of Scoop, with three flavors. Put them in a list, iterate over them, and print the flavor of each.
+class Scoop:
+    def __init__(self, flavor):
+        self.flavor = flavor
+
+s1 = Scoop('chocolate')
+s2 = Scoop('vanilla')
+s3 = Scoop('coffee')
+
+for one_scoop in [s1, s2, s3]:
+    print(one_scoop.flavor)
+chocolate
+vanilla
+coffee
+x = 100
+type(x)
+int
+x = 'abcd'
+type(x)
+str
+def hello(name):
+    return f'Hello, {name}'
+hello('Reuven')
+'Hello, Reuven'
+hello(5)
+'Hello, 5'
+hello([10, 20, 30])
+'Hello, [10, 20, 30]'
+hello(hello)
+'Hello, <function hello at 0x110c38680>'
+def hello(name:str):    # type annotation / type hint
+    return f'Hello, {name}'
+hello('Reuven')
+'Hello, Reuven'
+hello(5)
+'Hello, 5'
+hello([10, 20, 30])
+'Hello, [10, 20, 30]'
+hello(hello)
+'Hello, <function hello at 0x110c39ee0>'
+We typically don't put ice cream scoops in Python lists. Rather, we prefer to have them in bowls and cones.
+
+So.. a new exercise.
+
+Next up
+Exercise with a bowl of scoops
+More about methods
+Methods and special parameters
+Composition
+So far, we've seen that an attribute can contain a variety of types of values:
+
+Strings
+Integers
+Actually, an attribute can contain any Python value at all:
+
+List
+Tuple
+Dict
+User-defined class
+Having an object "inside" of another object is known as "composition." It is incredibly powerful, but also (in Python) the most mundane, standard thing that we do. Because strings, integers, etc. are all objects -- so if we can store them as attributes, then we can store anything else as attributes.
+
+class Person:
+    def __init__(self, name):
+        self.name = name
+        self.friends = []    # this is a list of the person's friends
+
+    def add_friend(self, new_friend):
+        self.friends.append(new_friend)
+
+p = Person('Reuven')
+p.add_friend('Whoever')
+
+p.friends
+['Whoever']
+p.add_friend('John')
+p.friends
+['Whoever', 'John']
+Exercise: Bowls of ice cream
+Define a Bowl class. Each instance of Bowl will have a scoops attribute, starting with an empty list. That list will contain Scoop objects, one per scoop in the bowl.
+Define a add_scoop method to the Bowl class. Show that we can add a number of scoops to the bowl.
+Define a flavors method to the Bowl class, which returns a list of strings -- the flavors from the scoops we have stored.
+Note: The scoops attribute on each Bowl instance should contain actual Scoop objects, not the flavors.
+
+Example:
+
+b = Bowl()
+b.add_scoop(s1)
+b.add_scoop(s2)
+b.add_scoop(s3)
+print(b.flavors())  # ['chocolate', 'vanilla', 'coffee']
+class Bowl:
+    def __init__(self):
+        self.scoops = []
+    def add_scoop(self, new_scoop):
+        self.scoops.append(new_scoop)
+    def flavors(self):
+        output = []
+        for one_scoop in self.scoops:
+            output.append(one_scoop.flavor)
+        return output
+
+b = Bowl()
+b.add_scoop(s1)
+b.add_scoop(s2)
+b.add_scoop(s3)
+print(b.flavors())  # ['chocolate', 'vanilla', 'coffee']
+['chocolate', 'vanilla', 'coffee']
+b.scoops
+[<__main__.Scoop at 0x11079bb90>,
+ <__main__.Scoop at 0x110799eb0>,
+ <__main__.Scoop at 0x11079b290>]
+Bowl(s1, s2, s3)
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+Cell In[97], line 1
+----> 1 Bowl(s1, s2, s3)
+
+TypeError: Bowl.__init__() takes 1 positional argument but 4 were given
+So what?
+At the end of the day, we could think of each Scoop object as a string (flavor) and each Bowl object as a list (containing scoops). But it's far nicer and easier to think about scoops in a bowl. By thinking in this concrete way, the design and maintenance of our software becomes that much esier.
+
+Also: We can add functionality over time, both to Scoop and to Bowl.
+
+class Bowl:
+    def __init__(self):
+        self.scoops = []
+
+    def add_scoop(self, new_scoop):
+        self.scoops.append(new_scoop)
+
+    def flavours(self):
+        self.flavour = []
+        return self.flavour
+
+s1 = 'chocolate'
+s2 = 'vanilla'
+s3 = 'coffee'
+
+b = Bowl()
+b.add_scoop(s1)
+b.add_scoop(s2)
+b.add_scoop(s3)
+print(b.flavours())
+[]
+class Scoop:
+    def __init__ (self, flavor):
+        self.flavor = flavor
+
+class Bowl:
+    def __init__(self):
+        self.scoops = []
+
+    def add_scoop(self, scoop):
+        self.scoops.append(scoop)
+
+    def flavors(self):
+        output =[]
+        for one_scoop in self.scoops:
+            output.append(one_scoop.flavor)
+        return output
+
+scoop1 = Scoop("Caramel")
+scoop2 = Scoop("Chocolate")
+scoop3 = Scoop("Vanilla")
+
+b = Bowl()
+b.add_scoop(scoop1)
+b.add_scoop(scoop2)
+b.add_scoop(scoop3)
+print(b.flavors())
+['Caramel', 'Chocolate', 'Vanilla']
+b.scoops[0].flavor
+'Caramel'
+Methods
+We have now seen that writing methods isn't that different from writing a regular function. The difference is that we invoke it via an object, and that we can only invoke it via an object.
+
+It turns out, though, that things are more complex than we thought.
+
+class Person:
+    def __init__(self, name):
+        self.name = name
+
+    def greet(self):
+        return f'Hello, {self.name}!'
+p = Person('Reuven')
+p.greet()    # I'm invoking the "greet" method on p, an instance of Person
+'Hello, Reuven!'
+# however, there is another way to invoke our method
+Person.greet(p)
+'Hello, Reuven!'
+Python rewrites method calls!
+
+If you invoke a method on an instance
+
+inst.method():
+That is immediately translated into:
+
+type(inst).method(inst)
+You can see that there's a bit of rewriting/switcheroo taking place. You can always invoke a method via the class, assuming that you have an instance to pass as the first argument. (Python will usually complain if you try to pass the wrong type of value.)
+
+s = 'abcd'
+s.upper()
+'ABCD'
+str.upper(s)
+'ABCD'
+What if I want more flexibility?
+What if I want the same method to be invoked with different numbers of arguments? Can I define the method once to take two, and once to take three?
+
+Many languages do allow you to define methods multiple times. They keep track of the numbers and types of arguments, and match (usually) the right method call to the right method.
+
+This doesn't happen in Python! You get one shot to define every method. If you redefine it, then the old version goes away.
+
+In order to get around this, functions in Python can take several special types of parameters:
+
+parameters with argument defaults, defined as x=10
+*args, a tuple containing all of the positional arguments that no one else wanted/absorbed
+**kwargs, a dict containing all of the keyword arguments that no one else wanted/absorbed
+def myfunc(a, *args):
+    return f'{a=}, {args=}'
+
+myfunc(10, 20, 30, 40, 50)    #
+'a=10, args=(20, 30, 40, 50)'
+Exercise: Change Bowl.add_scoop to Bowl.add_scoops
+Currently, our add_scoop method is the only way to add scoops to the Bowl instance, one at a time. I want you to change that method to be add_scoops, where it can take any number of arguments.
+
+class Scoop:
+    def __init__(self, flavor):
+        self.flavor = flavor
+
+s1 = Scoop('chocolate')
+s2 = Scoop('vanilla')
+s3 = Scoop('coffee')
+
+class Bowl:
+    def __init__(self):
+        self.scoops = []
+
+    def add_scoops(self, *new_scoops):   # this means: pass as many args as you want, all will be in the tuple new_scoops
+        for one_scoop in new_scoops:      # go through the tuple, one element at a time
+            self.scoops.append(one_scoop) # append to the list
+
+    def flavors(self):
+        output = []
+        for one_scoop in self.scoops:
+            output.append(one_scoop.flavor)
+        return output
+
+b = Bowl()
+b.add_scoops(s1, s2)
+b.add_scoops(s3)
+print(b.flavors())  # ['chocolate', 'vanilla', 'coffee']
+['chocolate', 'vanilla', 'coffee']
+return from a function/method
+return is not a function itself, so we don't normally use parentheses around the value we're returning. We can, and it'll work, but it's somewhat frowned upon.
+
+If you do that, then people might think you're returning a tuple.
+
+Tomorrow's plan
+Magic methods
+Class attributes
+Finding attributes with ICPO
+Inheritance -- what it is, and how it works (hint: ICPO)
