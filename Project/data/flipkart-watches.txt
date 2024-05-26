@@ -1,0 +1,11 @@
+Description,Name,Price,Discount,Total Price,Rating
+"Powder Blue, True Wireless","Boult Y1 Pro with Zen Quad Mic ENC, 60Hrs Battery, Fast...","₹1,199",80% off,,
+"Midnight, True Wireless",OPPO Enco Buds 2 with 28 hours Battery life & Deep Nois...,"₹1,599",60% off,,
+"Pearl White, True Wireless",boAt Airdopes 161/163 with ASAP Charge & 40 HRS Playbac...,₹899,63% off,,
+"Black Sabre, True Wireless","boAt Immortal 171 w/ Beast Mode(40ms Low Latency), 40 H...","₹1,099",68% off,,
+"Glacier Blue, True Wireless","Boult W20 with Zen ENC Mic, 35H Battery Life, Low Laten...","₹1,099",56% off,,
+"Pine Green, True Wireless","Boult W20 with Zen ENC Mic, 35H Battery Life, Low Laten...","₹1,099",56% off,,
+"Crystal Black, True Wireless","boAt Nirvana Ion 32dB Active Noise Cancellation, 120HRS...","₹2,099",78% off,,
+"Metallic Gray IN, True Wireless","OnePlus Buds 3 TWS, in Ear Earbuds with Sliding Volume ...","₹5,499",15% off,,
+"Galaxy Black, True Wireless","Mivi DuoPods K2 TWS,AI-ENC,40Hr Playtime,13mm Bass,Made...",₹699,76% off,,
+"Blue, True Wireless","Mivi Commando X7,35ms Low Latency,13mm Bass,50H Playtim...",₹799,80% off,,
