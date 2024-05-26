@@ -1,0 +1,41 @@
+Name,Title,Original Price,Final Price,Discount
+WOODLAND,Sneakers For Men,,"₹1,486",40% off
+PUMA,FTR Xtraflow IDP Running Shoes For Men,,"₹1,815",66% off
+RED TAPE,"Casual Sneaker Shoes for Men | Classic Rounded Toe, Soo...",,"₹1,099",80% off
+RED TAPE,"Sports Walking Shoes for Men | Soft Cushioned Insole, S...",,"₹1,179",80% off
+RED TAPE,"Casual Sneaker Shoes for Men | Classic Rounded Toe, Soo...",,"₹1,099",80% off
+RED TAPE,Men Black Clogs Sandal,,₹769,71% off
+REEBOK,Super Speed Running Shoes For Men,,"₹1,047",58% off
+PUMA,Puma Vellfire Sneakers For Men,,"₹1,947",56% off
+Roadster,Sneakers For Men,,₹700,79% off
+RED TAPE,Lifestyle Sneaker Shoes for Men | Soft Cushioned Insole...,,"₹1,139",80% off
+PUMA,Puma Neptune IDP Sneakers For Men,,"₹1,520",61% off
+REEBOK,Stride Runner M Running Shoes For Men,,"₹1,047",58% off
+RED TAPE,"Casual | Classic Rounded Toe, Soothing Insole Sneakers ...",,"₹1,099",80% off
+RED TAPE,Atheleisure Sports Shoes for Men | Soft Cushioned Insol...,,"₹1,379",80% off
+RED TAPE,Lifestyle Sneaker Shoes for Men | Soft Cushioned Insole...,,"₹1,539",80% off
+RED TAPE,Formal Loafers for Men | Real Leather Shoes With Low-cu...,,"₹1,379",80% off
+ADIDAS,Howzat Spike 20 Cricket Shoes For Men,,"₹3,951",48% off
+WOODLAND,Men Green Casual Sandal,,"₹2,189",40% off
+LOUIS PHILIPPE,Men Slides,,"₹1,179",41% off
+RED TAPE,"Casual Sneaker Shoes for Men | Classic Rounded Toe, Soo...",,"₹1,099",80% off
+PUMA,Puma Alfarun Hyperwave Sneakers For Men,,"₹1,599",60% off
+PUMA,Puma Smash V2 Buck Sneakers For Men,,"₹1,709",62% off
+RED TAPE,"Sneaker Casual Shoes For Men | Soft Cushion Insole, Sli...",,"₹1,079",80% off
+RED TAPE,Men Slides,,₹365,80% off
+RED TAPE,Men Olive Clogs Sandal,,₹799,70% off
+RED TAPE,Athleisure Sports Shoes for Men | Soft Cushioned Insole...,,"₹1,539",80% off
+WOODLAND,Casuals For Men,,"₹2,210",40% off
+WOODLAND,Outdoors For Men,,"₹2,306",40% off
+FLYING MACHINE,Sneakers For Men,,"₹1,530",41% off
+RED TAPE,"Athleisure Sports Shoes For Men | Slip Resistant, Dynam...",,"₹1,439",80% off
+PUMA,Puma Rungryp Sneakers For Men,,"₹2,300",53% off
+PUMA,Popcat 20 Shower RES Men Slides,,"₹1,119",51% off
+RED TAPE,Sports Walking Sports Shoes for Men | Soft Cushioned In...,,"₹1,639",80% off
+RED TAPE,"Sneaker Casual Shoes For Men | Soft Cushion Insole, Sli...",,"₹1,139",80% off
+RED TAPE,Formal Loafers for Men | Real Leather Shoes With Low-cu...,,"₹1,379",80% off
+RED TAPE,"Sports Shoes for Men | Dial Lace Quick On, Soft Cushion...",,"₹1,799",80% off
+PUMA,Flair 2 Walking Shoes For Men,,"₹2,050",58% off
+REEBOK,Urbane M Casuals For Men,,"₹2,537",40% off
+RED TAPE,Men Off White Clogs Sandal,,₹799,70% off
+Bata,KRIPTON E Lace Up For Men,,"₹1,154",45% off
