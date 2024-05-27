@@ -1,0 +1,171 @@
+Regex
+-----
+> -> redirect
+-H fileName
+grep filename /pathofdirectory
+find /pathofdirectory -exec grep -H regular {} \; 2>dev/null find file with regular in them
+sed -> stream editior -i -> inline used to edit in a file
+sed -i 's/zero/ZERO' words.txt
+s -> substitute second is matches third is replace
+
+regex -> sequence of characters called search pattern. used to search text.
+match text -> /some regex/
+substitute text -> s/this/that
+grep hello file.txt
+grep hello *
+sed -i 's/hello/goodbye/g' words.txt -> (g) substitute all occurences of hello  with goodbye
+can be used by many linux utilites like grep sed awk find
+
+grep -E 'hello|goodbye' usr.txt -> egrep -> extended regular expression
+grep 'hello\|goodbye' usr.txt
+grep -P 'hello|goodbye' usr.txt -> pcre
+grep -i 'hello' hello.txt -> insensitive case match
+
+grep -f regexes.txt /usr/share/dict/words -> match all the regex in the file with the one in word
+grep -v ne words.txt -> words which dont match ne
+
+https://regexcrossword.com/tutorial/1
+. -> matches any one character except \n
+grep a.b file.txt
+match a followed by any character but \n followed by b anywhere in the string.
+^ -> match the begining of string
+$ -> match the end of string.
+
+grep ^abc file.txt  -> match abc at the beginning of string.
+grep abc$ file.txt -> match abc at the end of string.
+
+To match special character they need to be escaped with backlash.
+grep a\.b\.c file.txt
+grep \^abc file.txt
+grep abc\$ file.txt
+
+think of characters in regex as statements
+/^abc$/
+if a at the begining then if b then if c at the end of string then match
+
+match lines with e anywhere in the line
+grep e words.txt
+
+match lines that starts with e.
+grep ^e words.txt
+
+begins with f and ends with e
+grep '^f..e$' words.txt
+
+character class -> square bracket create a class [] it stands for single character
+
+character class matches one character any character in the class.
+/[abcde]/
+matches one character a or b or c or d or e
+/[a-e]/ range matches a through e
+/[a-z]/ matches one character a through z
+/[0-9]/ matches one digit character
+
+ggrep '[a-z][0-9]' text.txt -> one character followed by one digit.
+ggrep '[a-z\-][0-9]' text.txt -> alpha digit or - digit
+
+grep '[0-9][0-9][0-9][0-9]' phonenumbers.txt -> 4 digits in a row
+grep -E '[0-9][0-9][0-9][ -][0-9][0-9][0-9]' phonenumbers.txt 3 digits followed by space or dash followed by 3 digits
+
+not in a class [^]
+/[^abcd]/ -> not a ,b, ,c,d
+/[^a-e]/ not range matches a through e
+/[^a-z]/ not matches one character a through z
+/[^0-9]/ not matches one digit character
+
+ggrep '[^a-z]' text.txt  -> not alpha characters
+ggrep '^[^a-z]' text.txt  starting character is not alpha
+ggrep '[[:lower:]]' text.txt -> posix character class matches lower case([a-z])
+[[:digit:]] = [0-9]
+/[12[^:digit:]]/ 1 2 or not digit
+/[abc[^:lower:]]/ abc or not lower
+
+\d -> digit[0-9]
+\D -> non digit[^0-9]
+\w -> word [a-zA-Z0-9_]
+\W -> non word [^a-zA-Z0-9_]
+\s -> space character [\t\n\r\f]
+\v -> vertical white space
+\h -> horizontal white space
+\x20 -> space character
+
+grep -E '\d\d\d\d' phonenumbers.txt 4 digits in a row
+grep -E '[\d{3}\s\d{3}]' phonenumbers.txt 3 digit followed by space dash new line followed by 3 digits
+grep -E '[A-Z]{3}' words.txt  -> atleast 3 upper case
+
+
+quantifiers {3}
+* zero or more occurences of whatever is to the left
+ab*c -> a zero or more b c
++ -> one or more occurence of whatever is to the left
+ab+c -> a one or more b c
+? -> zero or one occurence
+ab?c -> a zero or one occurence b c
+
+grep -E '\(?\d{3}\)?[ \.\-]*\d{3}[ \.\-]?\d{4}' phonenumbers.txt
+all phone numbers
+
+(?x) PCRE feature -> to introduce spaces to make regexes more readable
+ggrep '(?x)  \(?  \d{3}  \)?  [ \.\-]*  \d{3}  [ \.\-]?  \d{4}' phonenumbers.txt
+
+ggrep '^\d{3}.*d{3}$' -> lines that begin and end with 3 digits
+ggrep '^\d{3}[aeiou]{2}.*[a-z]{3}' lines that begin with 3 digits have 2 lower case vowels and end with 3 lowecase characters
+ggrep '^\d{2,}\D*\d{2,}$' lines that begin and end with 2 or more digits followed by non digit
+(?x) - embed whitespace
+(?i) - case insensitive match
+(?s) - single line mode (. matches \n)
+(?m) - multi-line mode (^ $ match begin/end of line)
+ \A - beginning of string
+ \Z - end of the string
+
+/(?xs) ^ hello .* world $ /
+- match a string starting with "hello" and ending with
+"world", even if that string has \n characters (multiple
+lines as a single string)
+
+/(?xs) ^ hello .* world $ /
+- match a string starting with "hello" and ending with
+"world", even if that string has \n characters (multiple
+lines as a single string)
+• /(?xm) ^ world /
+- match a string that has a line that begins with
+"world" (eg. "hello\nworld\n")
+
+\A - beginning of string
+\Z - end of string (or right before \n at the end)
+• Word boundaries:
+\b - beginning or end of a word
+\B - not the beginning or end of a word
+
+/a|b/ - either "a" or "b"
+
+/(.)\1/ - match two of the same character
+"aa", "bb", "77", "++"
+/(.)(.)\1\2/ - match two characters twice in a row
+"abab", "xyxy", "7878", "+-+-"
+
+*? - zero or more minimal
+ab*?c - "a", zero or more "b" (minimal), "c"
++? - one or more minimal
+ab+?c - "a", one or more "b" (minimal), "c"
+?? - zero or one minimal
+ab??c - "a", zero or one "b" (minimal), "c"
+
+*? - zero or more minimal
+ab*?c - "a", zero or more "b" (minimal), "c"
++? - one or more minimal
+ab+?c - "a", one or more "b" (minimal), "c"
+?? - zero or one minimal
+ab??c - "a", zero or one "b" (minimal), "c"
+
+lines that contain "hello" in upper or lower case
+grep -i 'hello' ex4.txt
+
+words that begin with 2 upper case letters
+grep -E '^[A-Z]{2}' ex4.txt
+
+words that end with either "u" or "z"
+grep -E '[u|z]$' ex4.txt
+
+words that begin and end with 2 vowels
+grep -E '^[aeiou]{2}[aeiou]{2}$'
