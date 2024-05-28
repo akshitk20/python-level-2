@@ -1,0 +1,276 @@
+Python
+------
+list comprehension
+solution to copying list
+b_list = a_list[:]
+new_list = [i  for i in old_list]
+sqr_list = [i*i for i in old_list]
+sqr_list = [i*i for i in old_list if i > 10]
+def is_palindrome(s):
+    reverse = [c.lower() for c in s if c.isalpha()]
+    print(reverse)
+    print(reverse == reverse[::-1])  # reverse[::-1] reversing the string
+
+
+is_palindrome('race Car')
+is_palindrome('hello')
+
+
+set comprehension
+in set no duplicates. ordering does not matter
+a_set = {1,2,3}
+b_set = {3,2,1}
+a_set == b_set true
+a_set = set() -> empty set
+a_set-b_set = give everything in first set that is not part of second set.
+sieve and set comprehension
+step1 : get big_set containing 2 to N
+step2 : get composite_set the set of composite numbers between 2 to N
+step3 : get the difference
+prime_set = big_set-comp_set
+range(2,N) -> get number from 2 to N-1
+
+formatting text
+%sign(format operator)
+print('x = %d, y = %d and z = %d', %(x,y,z))
+%d = integer
+%s = string
+you can use print field width with any of these values
+%10s
+%5d
+%8f
+width is used between the percent sign and character.
+for floating point(%f) we can specify a width and precision %width.precisionf
+print('The no is %8.3f' %3.1423424)
+The no is   3.142
+
+format function
+takes two arguments value and specification string
+format(value, spec_string)
+n=100000033
+print(format(n,','))  thousand place separate
+we can combine thousand place separator with other format specifiers.
+print(format(3141.5926, '9,.2f'))
+
+format method
+combines the capabilites of format sign and format method.
+format_string.format(args)
+for x in [-5, 0.2, 125.7, 3.141592, -12.007, ]:  # %f = float
+    print('  {:8.3f}'.format(x))
+
+
+multidimensional arrays
+multiplication operator can create arbitrarly long list
+big_list = [0] * 1000 # 1000 0's
+bbb_list = [1] * 5000 # 5000 1's
+mat1 = [[0] * 20] * 10 # 10 references to one row so wrong
+print(mat1)
+mat = []
+for i in range(10): 10X20
+	mat.append([0] * 20)
+mat3 = [[0] * 20 for i in range(10)]
+mat3 = [[1,2,3] * 20 for _ in range(10)] _ can be used for i
+
+
+Dictionaries
+------------
+to convert dictionary to list made up of tuples call items method
+d.items() returns list of key/value pairs
+use list comprehension to reverse the order of key value sorting purposes
+
+Generator
+---------
+yeild keyword enables you to write a generator function which is really a generator factory
+when we donot want to store all in memory we want to go one at a time.
+
+Decorators
+----------
+goal of decoration
+we would like to profile all our functions by printing out how long they took to execute.
+we would like to print other information such as function name and argument values
+we would like to automate the process of doing the above for any function.
+
+we can get time/performance information using time package
+t1 = time.time()
+t2 = time.time()
+fist add some statements to be executed first before the profiled function is.
+execute the profiled function itself
+add some more statement to be executed after the profiled function
+from all this create a new function which we might call the wrapper function
+
+def wrappers(*args, **kwargs) arguments and keywordarguments
+def my_decorator(func):
+	def wrapper(*args, **kwargs):
+		t1 = time.time()
+		rv = func(*args, **kwargs)
+		t2 = time.time()
+		print('Time taken: ', t2 - t1)
+		print('Args are', args)
+		print('KW args are:', kwargs)
+		return rv
+	return wrapper
+functions are first class object in python, assignment rules function work just as they do with anything else
+@ -> the purpose is to automate the following statement:
+function_name = decorator(function_name)
+function name is now reassigned to refer to the new version of the function. This is very important because it means the entire program will continue to work without using a bunch of new function names
+
+what are objects??
+orgainzing code so that you can find bugs and improve the code is crucial
+class is a user defined type
+unlike a passive user defined type a class can define functions for the type as well as data fields. These fields are called through the instances of class.
+instances of classes are called object
+function defined in a class are called methods and they enable objects of the class to provide services
+class is like data record plus type
+object is instance of class
+class class_name:
+	statements
+
+class Point:
+	pass
+
+self is the reference of object itself. it takes the value and loads it into object.
+the __init__ method is automatically called upon initialization.
+print method calls __str__ already
+__str__ is equal to toString method
+pickle package is used to store data in binary format in a file.
+more efficient than txt file.
+before we do pickle dump or pickle load we must import the pickle package once for each source file
+open a binary file for writing and then dump as follows
+pickle.dump(data_obj, file_obj)
+later open a binary file for reading and load data as follows
+variable = pickle.load(file_obj)
+
+object-oriented programming is a technique for managing your software code. this means that if you write tiny pogram you probably dont need to use objects. But it means that if you want to take advantage of someone else code and they did use objects you will likely want to do that
+
+Everything is an object what that does that mean?
+it means we can apply the same rules to the data provided by python as the data we create ourselves
+it means same rules are apply to Python own stuff
+It also means that you can learn the rules for how many things inside of Python work you will find that those rules are very consistent for your data structures.
+we will see that we can create classes that follow the same rules as Python built in data types.
+
+class and type : these are basically interchangable but they are used differently when we are actually coding. str is class that creates new string objects. and int is class that creates new integer objects. In fact you can call int('5') you are saying I want to create new integer based on the string S. when we invoke a class as a function with () we are creating new object of that type
+
+instance :- when we create new string object we call that instance of str. instance is an object that was created by class
+every instance have attribute on the instance
+object :- classes and instances are both objects. the term object is catchall for just about everything in python
+
+s = 'abc'
+type(s)
+the type/class of an object determines the functionality
+how can we create a new instance of this object
+what methods have been defined for it
+what arguments do they get?
+what output do they give us?
+
+s is variable referring to string
+method always a . before its name. function is not like len
+
+when we create new class we need to store the class somewhere. That will be in variable though in Python its traditional to use capital letter for variable containing class and lowecase for just about everything.
+when we create new instance of that class we will need to store it somewhere. That will be variable containing instance.
+
+1) Define tuple containing information about company with fields for the company's name its domain and number of employees.
+2) Write a function that expects to get that tuple and returns a string saying 'COMPANY in DOMAIN'
+3) What happens when you run type on your tuple? What do you get?
+
+tuple is described as belo
+c1 = ('BigCo','Money',100000)
+
+def describe(company_tuple):
+return f '{company_tuple[0]} in {company_tuple[1]}'
+
+f string is better than plus it handles the typecasting as well
+
+i want to create new person class.
+class Person:
+    def __init__(self,name):
+        self.name = name
+
+__init__ assigned that value to self.name. This is how we assign to an attribute on the instance. Once this is set to self.name we say that object has a name attribure. We then can retrieve it using .name
+
+1) Re implement and create class. call class company.
+2) create two instances of company each with a name, domain and size. Each of these value should be assigned to __init__
+
+when we invoke a class to create new instance a constructor method for that class is invoked. As name indicates constructor creates new instance of our class and gets it ready to be returned
+
+The real constructor method in python is __new__ not __init__. you will never implement it yourself. let python create objects for you.
+1) __new__ is called automatically when we call the class. It gets all of the arguments that get passed on to the class.
+2) inisde of __new__ python creates new instances. instance knows what type of object it is but otherwise has no attributes.
+3) where will those attributes be set? inside __init__. we need to somehow pass the object to __init__ along with all the arguments that were passed to the class. we call __init__ with the instance that was just created with the first argument along with the rest of the argument
+
+This means when we wrote
+Company('BigCo','Money',100000)
+converted to
+__init__(NEW_INSTANCE,'BigCo','Money',100000
+4) inside of __init__ we can assign attributes to our new objet.
+5) the first parameter of __init__ contains the new instance. in fact every method in python the first parameter contains the instance on which we are working. That parameter is called self.
+6) because self refers to the instance we can assign to self's attribute.
+
+Why self??
+1) In other languages class definition includes some declaration of what the instance variables/attributes will be for an objects. that allows the language to know in advance when you set/retrieve x are ypu talking abt variable. In python we dont have such declarations so there is no implicit way for language to know.
+2) In Python we have strict variable lookup called LEGB. That has to do with all the variables inside and outside of methods. In order for that rule to work we need to use attributes stuck on an object, and the object needs to be explicit. We use self to avoid confusing ourselves and Python between attributes and variables.
+self.x x is attribute on instance. self refers to instance
+
+the job of __init__ is to assign attributes to self.
+no static final variable in python
+
+getters and setters
+In other languages you can indicate whether an attribute is private public or protected. this gives you some ability to restrict who can read from and write into your attributes. Python has nothing of that sort. everything is public. there is not any need for us to have methods and then get special access.
+getters and setters are considered un pythonic
+
+If the attribute is set or retrieved on self by definition that means that the attribute is on specific instance. Its an instance attribute. This is what many programmming language would call instance variable. But they are not variables in python. they are attributes attached on instances. in car analogy it can be vin color model etc.
+class attributes apply to the factory and not to the product that it makes. in car analogy it will be no of employees, size in acres etc
+
+having an object inside of another object is called composition. it is incredibly powerful and most mundane standard thing we do.
+
+1) Define Bowl class each instance of bowl will have scoop attribute. starting with empty list.
+2) define add scopp method in Bowl class
+3) define flavors method that returns list of string the flavors from the scoop we have stored.
+b = Bowl()
+b.add_scoop(s1)
+b.add_scoop(s2)
+b.add_scoop(s3)
+print(b.flavours()) ['chocolate','vanilla','coffee']
+
+normally methods are
+invoked via the instances
+defined on the class
+
+what we have seen so far though is not python calls a class method Rather class describes the behaviour of our object and thus it is the place where all the methods are defined and stored
+
+namespaces
+when we say type(p) we get __main__.Person.
+I said that __main__ is namespace. Every variable in python is inside of a namespace meaning a category of variables. Namespaces ensure that if i work on a program and call my variable x and you work on a program and call your variable x then if we combine forces our two x variables wont clash
+Python defines __main__ namespace by default when we start up. Every module you load with import has its own name space
+you can think of namespaces are last name in variable world.
+
+Steve yugge
+https://steve-yegge.blogspot.com/2006/03/execution-in-kingdom-of-nouns.html
+
+magic methods
+-------------
+when we perform certain operations in python the language looks for method with specific name that implements that operation. These methods all start and end with double underscores and are thus known as dunders. you can think of magic methods as callbacks methods that are invoked if they exists by specific part of Pythons object system.
+__len__(self):
+__str__(self): print invokes __str__ on whatever it prints.
+
+__str__ vs __repr__
+__str__ -> is invoked by str and also by print(because it invokes str on its argument) This must return a string and the string is meant for end users to see.
+__repr__ -> is used by debuggers and Jupyter. it is meant to show the printed representation of data structures
+
+__getitem__
+why is it we define list as [] and then retrieve from strings, lists, tuples and dict with []
+the answer is [] is turned into method call the method __getitem__. it takes two arguments self and index
+
+any defintion of what looks like a variable inside a class is actually a assignment to class attribute
+where do we use class attributes
+methods are all defined as class atributes
+if you have to store common data that has to be used with class then class attribute is the best place
+if you want constant class attribute is the place.
+
+ICPO rule
+when we ask python to retrieve an attribute from an object it just doesnot look where we asked.
+It also looks on few other objects if it does not find it right away.
+ I for instance : The first place it looks is for the object we asked for If we ask for Person.population Python asks Person do you have an attribute named population? the answer is yes. But if we do p1.population Python asks p1 Do you have attribute named population. The answer is no.
+ C for class : Because we did not find the attribute on initial instance we tried we then turn to class that means type(p1) do you have attribute named population. answer is yes.
+
+ class Empoyee(Person):
+ 	def __init__()
